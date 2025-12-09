@@ -19,21 +19,24 @@ public class CalculatorTCPClient {
             String text;
 
             while (true) {
-                System.out.print("Enter expression: ");
+                System.out.print("Enter expression (num op num) or close/exit: ");
                 text = sc.nextLine();
 
                 output.println(text);
 
+                if (text.equals("close")) {
+                    socket.close();   
+                    return;
+                }
+
                 if (text.equals("exit")) {
-                    System.out.println("Client closed.");
-                    break;
+                    socket.close();   
+                    return;
                 }
 
                 String resp = input.readLine();
                 System.out.println(text + " = " + resp);
             }
-
-            socket.close();
 
         } catch (Exception e) {
             System.out.println("Error: " + e);

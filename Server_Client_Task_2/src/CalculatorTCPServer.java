@@ -22,12 +22,23 @@ public class CalculatorTCPServer {
 
             while ((line = input.readLine()) != null) {
 
+                if (line.equals("close")) {
+                    System.out.println("Client request to close connection.");                   
+                    client.close();
+                    System.out.println("Client disconnected.");
+                    client = server.accept();
+                    input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                    output = new PrintWriter(client.getOutputStream(), true);
+                    System.out.println("Client connected.");
+                    continue;
+                }
+
                 if (line.equals("exit")) {
-                    System.out.println("Client requested to close connection.");
+                    System.out.println("Client requested exit. Shutting server.");
                     break;
                 }
 
-                System.out.println("Received expression: " + line);
+                System.out.println("Received expression : " + line);
 
                 String[] parts = line.split(" ");
                 String result;
@@ -63,7 +74,7 @@ public class CalculatorTCPServer {
                 }
 
                 output.println(result);
-            }
+            }                  
 
             client.close();
             server.close();
